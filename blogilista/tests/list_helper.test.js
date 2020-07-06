@@ -65,3 +65,49 @@ describe('total likes', () => {
     expect(listHelper.totalLikes(biggerList)).toBe(13)
   })
 })
+
+describe('favorite blog', () => {
+
+  const testlist = [
+    {
+      _id: '1',
+      title: '',
+      author: '',
+      url: '',
+      likes: 10,
+      __v: 0
+    },
+    {
+      _id: '2',
+      title: '',
+      author: '',
+      url: '',
+      likes: 5,
+      __v: 0
+    },
+    {
+      _id: '3',
+      title: '',
+      author: '',
+      url: '',
+      likes: 3,
+      __v: 0
+    },
+    {
+      _id: '4',
+      title: '',
+      author: '',
+      url: '',
+      likes: 123,
+      __v: 0
+    }
+  ]
+
+  test('return null if empty list', () => {
+    expect(listHelper.favoriteBlog([])).toBe(null)
+  })
+  test('return blog with most likes', () => {
+    expect(listHelper.favoriteBlog(testlist)).toEqual(testlist[3])
+  })
+
+})
