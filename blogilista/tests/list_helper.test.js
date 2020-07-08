@@ -31,6 +31,22 @@ const testlist = [
     url: 'jee.com',
     likes: 123,
     __v: 0
+  },
+  {
+    _id: '5',
+    title: 'jee2',
+    author: 'ramboldi',
+    url: 'jee2.com',
+    likes: 12,
+    __v: 0
+  },
+  {
+    _id: '56',
+    title: 'jee23',
+    author: 'ramboldi',
+    url: 'jee23.com',
+    likes: 1,
+    __v: 0
   }
 ]
 
@@ -53,42 +69,6 @@ describe('total likes', () => {
     }
   ]
 
-  const biggerList = [
-    {
-      _id: '1',
-      title: '',
-      author: '',
-      url: '',
-      likes: 5,
-      __v: 0
-    },
-    {
-      _id: '2',
-      title: '',
-      author: '',
-      url: '',
-      likes: 5,
-      __v: 0
-    },
-    {
-      _id: '3',
-      title: '',
-      author: '',
-      url: '',
-      likes: 3,
-      __v: 0
-    },
-    {
-      _id: '4',
-      title: '',
-      author: '',
-      url: '',
-      likes: 0,
-      __v: 0
-    }
-  ]
-
-
   test('of empty list is zero', () => {
     expect(listHelper.totalLikes([])).toBe(0)
   })
@@ -96,30 +76,30 @@ describe('total likes', () => {
     expect(listHelper.totalLikes(listWithOneBlog)).toBe(5)
   })
   test('of a bigger list is calculated right', () => {
-    expect(listHelper.totalLikes(biggerList)).toBe(13)
+    expect(listHelper.totalLikes(testlist)).toBe(154)
   })
 })
 
 describe('favorite blog', () => {
-  test('return null if empty list', () => {
-    expect(listHelper.favoriteBlog([])).toBe(null)
-  })
   test('return blog with most likes', () => {
     expect(listHelper.favoriteBlog(testlist)).toEqual(testlist[3])
   })
 })
 
 describe('most blogs', () => {
-  test('return null if empty list', () => {
-    expect(listHelper.mostBlogs([])).toBe(null)
-  })
-
   test('correct author', () => {
-    expect(listHelper.mostBlogs(testlist).author).toEqual('kuuboldi')
+    expect(listHelper.mostBlogs(testlist).author).toEqual('ramboldi')
   })
-
   test('correct number of blogs', () => {
-    expect(listHelper.mostBlogs(testlist).blogs).toEqual(2)
+    expect(listHelper.mostBlogs(testlist).blogs).toEqual(3)
   })
+})
 
+describe('most likes', () => {
+  test('correct author', () => {
+    expect(listHelper.mostLikes(testlist).author).toEqual('ramboldi')
+  })
+  test('correct number of likes', () => {
+    expect(listHelper.mostLikes(testlist).likes).toEqual(136)
+  })
 })
