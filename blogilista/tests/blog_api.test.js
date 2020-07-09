@@ -42,6 +42,33 @@ test('a specific blog(object) is within the returned blogs', async () => {
 })
 */
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'The New Blog',
+    author: 'The New Blogger',
+    url: 'new.blog',
+    likes: 123
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  let blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  blogsAtEnd = blogsAtEnd.map(r => {
+    let { id, ...rest } = r
+    return rest
+  })
+
+  expect(blogsAtEnd).toContainEqual(newBlog)
+})
+
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
