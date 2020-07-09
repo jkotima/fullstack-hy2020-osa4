@@ -67,7 +67,7 @@ test('a valid blog can be added', async () => {
   expect(blogsAtEnd).toContainEqual(newBlog)
 })
 
-test('if likes-field in POST undefined, likes should be initialized as zero', async () => {
+test('if likes-field in POST undefined, it should be initialized as zero', async () => {
   const blogWithoutLikes = {
     title: 'The Sad Blog',
     author: 'The Sad Blogger',
@@ -91,6 +91,17 @@ test('if likes-field in POST undefined, likes should be initialized as zero', as
   expect(blogsAtEnd).toContainEqual(Object.assign(blogWithoutLikes, { likes: 0 } ))
 })
 
+test('if both title and url in POST undefined, should return 400 Bad Request', async () => {
+  const blogWithoutTitleAndUrl = {
+    author: 'The Mysterious Blogger',
+    likes: 123
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutTitleAndUrl)
+    .expect(400)
+})
 
 afterAll(() => {
   mongoose.connection.close()
