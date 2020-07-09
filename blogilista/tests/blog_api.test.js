@@ -21,6 +21,13 @@ test('all blogs are returned', async () => {
   const blogsAtEnd = await helper.blogsInDb()
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
 })
+
+test('first returned blog has a field called \'id\'', async () => {
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd[0].id).toBeDefined()
+})
+
+
 /*
 test('a specific blog(object) is within the returned blogs', async () => {
   const blogsAtEnd = await helper.blogsInDb()
