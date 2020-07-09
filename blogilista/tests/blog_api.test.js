@@ -67,6 +67,29 @@ test('a valid blog can be added', async () => {
   expect(blogsAtEnd).toContainEqual(newBlog)
 })
 
+test('if likes-field in POST undefined, likes should be initialized as zero', async () => {
+  const blogWithoutLikes = {
+    title: 'The Sad Blog',
+    author: 'The Sad Blogger',
+    url: 'sad.blog',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithoutLikes)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  let blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+  blogsAtEnd = blogsAtEnd.map(r => {
+    let { id, ...rest } = r
+    return rest
+  })
+
+  expect(blogsAtEnd).toContainEqual(Object.assign(blogWithoutLikes, { likes: 0 } ))
+})
 
 
 afterAll(() => {
