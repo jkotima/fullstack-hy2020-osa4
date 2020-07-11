@@ -1,11 +1,17 @@
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
 
+// todo: validation
+
 const blogSchema = mongoose.Schema({
   title: String,
   author: String,
   url: String,
-  likes: Number
+  likes: Number,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 blogSchema.set('toJSON', {
