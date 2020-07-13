@@ -1,9 +1,16 @@
 const mongoose = require('mongoose')
+mongoose.set('useCreateIndex', true)
+const uniqueValidator = require('mongoose-unique-validator')
 
 const userSchema = mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    unique: true,
+    minlength: 3,
+    required: true
+  },
   name: String,
-  passwordHash: String,
+  passwordHash: String, // validation in controller
   blogs: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -11,6 +18,7 @@ const userSchema = mongoose.Schema({
     }
   ]
 })
+userSchema.plugin(uniqueValidator)
 
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {

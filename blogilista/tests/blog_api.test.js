@@ -5,12 +5,13 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
-})
 
 describe('when there is initially some blogs saved', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(helper.initialBlogs)
+  })
+
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -80,7 +81,7 @@ describe('addition of a new blog', () => {
       .expect('Content-Type', /application\/json/)
 
     let blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 2)
 
     blogsAtEnd = blogsAtEnd.map(r => {
       let { id, ...rest } = r
@@ -114,9 +115,7 @@ describe('deletion of a blog', () => {
 
     let blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(
-      helper.initialBlogs.length - 1
-    )
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
 
     expect(blogsAtEnd).not.toContainEqual(blogToDelete)
   })
