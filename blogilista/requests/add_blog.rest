@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtheXR0YWphIiwiaWQiOiI1ZjBjODE0M2Y4OTRiODNhNmIzZTc0NTUiLCJpYXQiOjE1OTQ2NTY5NjN9.Eorbjg6CBE3tFgig74-wvR1LMj8MWIePnMfr1KU30fs
 
 {
-    "author": "bloasdlogia",
+    "author": "tokeniblogi",
     "likes": 1,
-    "url": "Jee.jeeasdza"
+    "url": "tokeni.blgi"
 }
