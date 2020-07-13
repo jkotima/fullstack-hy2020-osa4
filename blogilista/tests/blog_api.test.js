@@ -53,14 +53,14 @@ describe('addition of a new blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
-      .expect(201)
+      .expect(200)
       .expect('Content-Type', /application\/json/)
 
     let blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
     blogsAtEnd = blogsAtEnd.map(r => {
-      let { id, ...rest } = r
+      let { id, user, ...rest } = r
       return rest
     })
 
@@ -77,14 +77,14 @@ describe('addition of a new blog', () => {
     await api
       .post('/api/blogs')
       .send(blogWithoutLikes)
-      .expect(201)
+      .expect(200)
       .expect('Content-Type', /application\/json/)
 
     let blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 2)
 
     blogsAtEnd = blogsAtEnd.map(r => {
-      let { id, ...rest } = r
+      let { id, user, ...rest } = r
       return rest
     })
 
