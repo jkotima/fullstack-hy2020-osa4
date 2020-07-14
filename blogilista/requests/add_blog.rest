@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImtheXR0YWphIiwiaWQiOiI1ZjBjODE0M2Y4OTRiODNhNmIzZTc0NTUiLCJpYXQiOjE1OTQ2NTY5NjN9.Eorbjg6CBE3tFgig74-wvR1LMj8MWIePnMfr1KU30fs
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI1ZjBkOGY4OTdkZDM3NjZmNTg4Y2ZkNTMiLCJpYXQiOjE1OTQ3MjQzMDd9.gB8PXQHol6-eZm287MpXSo1BpdEN4BVpfHoX92gsKn4
 
 {
-    "author": "jeejeejorma",
+    "author": "usernamen blogi",
     "likes": 1,
-    "url": "tokeni.blgi"
+    "url": "blgi"
 }
