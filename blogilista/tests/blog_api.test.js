@@ -5,7 +5,6 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
 
-
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
@@ -29,7 +28,6 @@ describe('when there is initially some blogs saved', () => {
     expect(blogsAtEnd[0].id).toBeDefined()
   })
 
-
   test('a specific blog(object) is within the returned blogs', async () => {
     let blogsAtEnd = await helper.blogsInDb()
 
@@ -41,6 +39,8 @@ describe('when there is initially some blogs saved', () => {
     expect(blogsAtEnd).toContainEqual(helper.initialBlogs[0])
   })
 })
+
+
 describe('addition of a new blog', () => {
   test('a valid blog can be added', async () => {
     const newBlog = {
@@ -50,11 +50,15 @@ describe('addition of a new blog', () => {
       likes: 123
     }
 
+    const token = await helper.createTestUserToken()
+
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + token)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
+
 
     let blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
@@ -74,8 +78,11 @@ describe('addition of a new blog', () => {
       url: 'sad.blog',
     }
 
+    const token = await helper.createTestUserToken()
+
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + token)
       .send(blogWithoutLikes)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -88,7 +95,7 @@ describe('addition of a new blog', () => {
       return rest
     })
 
-    expect(blogsAtEnd).toContainEqual(Object.assign(blogWithoutLikes, { likes: 0 } ))
+    expect(blogsAtEnd).toContainEqual(Object.assign(blogWithoutLikes, { likes: 0 }))
   })
 
   test('if both title and url in POST undefined, should return 400 Bad Request', async () => {
@@ -97,27 +104,73 @@ describe('addition of a new blog', () => {
       likes: 123
     }
 
+    const token = await helper.createTestUserToken()
+
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + token)
       .send(blogWithoutTitleAndUrl)
       .expect(400)
   })
-})
 
-describe('deletion of a blog', () => {
-  test('if id is valid, succeeds with status code 204 and blog is removed from db', async () => {
+  test('a blog without token cannot be added and should return 401 Unauthorized', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+
+    const newBlog = {
+      title: 'The Tokenless Blog',
+      author: 'The Tokenless Blogger',
+      url: 'tokenless.blog',
+      likes: 123
+    }
 
     await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd.length).toBe(blogsAtStart.length)
+  })
+})
+
+
+describe('deletion of a blog', () => {
+  test('creation and deletion of a blog works with correct status codes', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const newBlog = {
+      title: 'The New Blog',
+      author: 'The New Blogger',
+      url: 'new.blog',
+      likes: 123
+    }
+
+    const token = await helper.createTestUserToken()
+
+    // create blog
+    const result = await api
+      .post('/api/blogs')
+      .set('Authorization', 'bearer ' + token)
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogToDelete = result.body
+
+    expect(await helper.blogsInDb()).toHaveLength(blogsAtStart.length + 1)
+
+    // delete blog
+    await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', 'bearer ' + token)
       .expect(204)
 
-    let blogsAtEnd = await helper.blogsInDb()
+    const blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
-
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
     expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+
   })
 })
 

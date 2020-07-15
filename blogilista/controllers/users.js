@@ -4,6 +4,7 @@ const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
+
   if (body.password === undefined) {
     response.status(400).json({ error: 'Undefined password' })
   } else if (body.password.length < 3) {
